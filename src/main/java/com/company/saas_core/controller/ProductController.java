@@ -39,9 +39,7 @@ public class ProductController {
 	}
 
 	@GetMapping
-	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE'"
-			+ ""
-			+ ")")
+	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
 	public ResponseEntity<ApiResponse<List<ProductResponse>>> list() {
 	    return ResponseEntity.ok(
 	            ApiResponse.success(
