@@ -1,59 +1,99 @@
 package com.company.saas_core.model;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
 
-@Entity(name = "users")
-@Table(name = "users")
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
+@Entity
+@Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
+		@UniqueConstraint(columnNames = { "email" }) })
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 public class UserAccount extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String username;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String password;
+	@Column(nullable = false)
+	private String username;
 
-    private String roles; // comma-separated
+	@Column(nullable = false)
+	private String email;
 
-    private boolean enabled = true;
+	@Column(nullable = false)
+	private String password;
 
-    public Long getId() {
-        return id;
-    }
+	@Column(nullable = false)
+	private String roles;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(nullable = false)
+	private boolean enabled = true;
 
-    public String getUsername() {
-        return username;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getUsername() {
+		return username;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public String getRoles() {
-        return roles;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setRoles(String roles) {
-        this.roles = roles;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public boolean isEnabled() {
-        return enabled;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public UserAccount(String username, String email, String password, String roles, boolean enabled) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.roles = roles;
+		this.enabled = enabled;
+	}
+
+	public UserAccount() {
+	}
+
+
 }

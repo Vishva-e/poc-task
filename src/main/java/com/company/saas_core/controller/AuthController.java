@@ -1,6 +1,6 @@
 package com.company.saas_core.controller;
 
-import com.company.saas_core.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,37 +8,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.company.saas_core.api.response.ApiResponse;
+import com.company.saas_core.model.request.LoginRequest;
+import com.company.saas_core.model.response.LoginResponse;
+import com.company.saas_core.service.UserService;
 
 @RestController
 @RequestMapping("/api/auth")
 @Validated
 public class AuthController {
 
-    private final UserService userService;
+	@Autowired
+	private UserService userService;
 
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+	@PostMapping("/login")
+	public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest r) throws Exception {
 
-    public static class LoginRequest {
-        @NotBlank
-        public String username;
-        @NotBlank
-        public String password;
-        @NotNull
-        public Long tenantId;
-    }
+		return ResponseEntity
+				.ok(ApiResponse.success("Login successful", userService.authenticate(r.username, r.password)));
 
-    public static class LoginResponse {
-        public String token;
-        public LoginResponse(String token) { this.token = token; }
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest r) {
-        String token = userService.authenticate(r.username, r.password, r.tenantId);
-        return ResponseEntity.ok(new LoginResponse(token));
-    }
+	}
 }

@@ -1,41 +1,51 @@
 package com.company.saas_core.model;
 
+import org.hibernate.annotations.Filter;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity(name = "tenant")
+@Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
 public class Tenant {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
+    @Column(name= "api_key",unique = true, nullable = false)
+    private String apiKey;   
+
+    @Column(nullable = false)
     private String name;
 
-    private String code;
+	public Long getId() {
+		return id;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public String getApiKey() {
+		return apiKey;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setApiKey(String apiKey) {
+		this.apiKey = apiKey;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}        
+    
+    
+	
+    
 }

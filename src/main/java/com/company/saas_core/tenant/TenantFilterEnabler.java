@@ -1,9 +1,11 @@
 package com.company.saas_core.tenant;
 
-import jakarta.persistence.EntityManagerFactory;
-import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 
 /**
  * Helper that enables the Hibernate tenant filter for the current session.
@@ -12,18 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TenantFilterEnabler {
 
-    private final EntityManagerFactory emf;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    public TenantFilterEnabler(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-
+    @Transactional
     public void enableFilter() {
         Long tenantId = TenantContext.getTenantId();
-        if (tenantId == null) return;
+        if (tenantId == null) {
+            return;
+        }
 
-        SessionFactory sf = emf.unwrap(SessionFactory.class);
-        Session session = sf.getCurrentSession();
-        session.enableFilter("tenantFilter").setParameter("tenantId", tenantId);
+        Session session = entityManager.unwrap(Session.class);
+        session.enableFilter("tenantFilter")
+               .setParameter("tenantId", tenantId);
     }
 }

@@ -1,25 +1,28 @@
 package com.company.saas_core.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.Instant;
 
 @MappedSuperclass
+@FilterDef(
+	    name = "tenantFilter",
+	    parameters = @ParamDef(name = "tenantId", type = Long.class)
+	)
 public abstract class BaseEntity {
 
     @Column(name = "tenant_id", nullable = false)
     private Long tenantId;
 
-    @CreationTimestamp
     @Column(name = "created_at", updatable = false)
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
-    @UpdateTimestamp
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public Long getTenantId() {
         return tenantId;
@@ -29,11 +32,20 @@ public abstract class BaseEntity {
         this.tenantId = tenantId;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 }

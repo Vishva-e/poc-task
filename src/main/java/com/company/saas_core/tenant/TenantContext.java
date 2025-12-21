@@ -1,11 +1,8 @@
 package com.company.saas_core.tenant;
 
-/**
- * ThreadLocal context that stores the current request's tenant id.
- */
 public final class TenantContext {
     private static final ThreadLocal<Long> CURRENT_TENANT = new ThreadLocal<>();
-
+	
     private TenantContext() {}
 
     public static void setTenantId(Long tenantId) {
