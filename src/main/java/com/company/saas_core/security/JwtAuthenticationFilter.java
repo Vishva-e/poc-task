@@ -10,7 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.company.saas_core.exception.ConflictException;
 import com.company.saas_core.tenant.TenantContext;
 
 import io.jsonwebtoken.Claims;
@@ -41,20 +40,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 	}
 
-	private void extractAndAuthenticate(HttpServletRequest request) throws ConflictException {
+	private void extractAndAuthenticate(HttpServletRequest request) {
 		String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
 		if (!StringUtils.hasText(authHeader) || !authHeader.startsWith(BEARER_PREFIX)) {
 			return;
 		}
-		Claims claims = null;
 		String token = authHeader.substring(BEARER_PREFIX.length());
 
-		try {
-			claims = jwtService.parseClaims(token);
-		} catch (Exception e) {
-			throw new ConflictException("Token Expried, Please login again");
-		}
+		Claims claims = jwtService.parseClaims(token);
 
 		String username = claims.getSubject();
 		Long tenantId = extractTenantId(claims);

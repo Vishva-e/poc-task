@@ -12,18 +12,12 @@ import com.company.saas_core.model.request.UpdateProductRequest;
 import com.company.saas_core.model.response.ProductResponse;
 import com.company.saas_core.repository.ProductRepository;
 import com.company.saas_core.tenant.TenantContext;
-import com.company.saas_core.tenant.TenantFilterEnabler;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
 public class ProductService {
 
 	@Autowired
 	ProductRepository productRepository;
-	@Autowired
-	TenantFilterEnabler tenantFilterEnabler;
 
 	@Transactional
 	public ProductResponse create(CreateProductRequest request) {
@@ -50,13 +44,11 @@ public class ProductService {
 
 	@Transactional(readOnly = true)
 	public List<ProductResponse> list() {
-		tenantFilterEnabler.enableFilter();
 		return productRepository.findAll().stream().map(this::mapToResponse).toList();
 	}
 
 	@Transactional(readOnly = true)
 	public ProductResponse get(Long id) {
-		tenantFilterEnabler.enableFilter();
 		Long tenantId = TenantContext.getTenantId();
 		Product p = productRepository.findByIdAndTenantId(id, tenantId)
 				.orElseThrow(() -> new RuntimeException("Product not found"));
@@ -65,7 +57,6 @@ public class ProductService {
 
 	@Transactional
 	public ProductResponse update(Long id, UpdateProductRequest req) {
-		tenantFilterEnabler.enableFilter();
 		Long tenantId = TenantContext.getTenantId();
 		Product p = productRepository.findByIdAndTenantId(id, tenantId)
 				.orElseThrow(() -> new RuntimeException("Product not found"));
@@ -79,7 +70,6 @@ public class ProductService {
 
 	@Transactional
 	public void delete(Long id) {
-		tenantFilterEnabler.enableFilter();
 		Long tenantId = TenantContext.getTenantId();
 		Product p = productRepository.findByIdAndTenantId(id, tenantId)
 				.orElseThrow(() -> new RuntimeException("Product not found"));

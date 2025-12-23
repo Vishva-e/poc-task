@@ -44,9 +44,9 @@ public class RestExceptionHandler {
 	}
 
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<ApiResponse<Void>> handleGeneric() {
+	public ResponseEntity<ApiResponse<Void>> handleGeneric(Exception ex) {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(ApiResponse.failure("Internal server error", ErrorCodes.INTERNAL_ERROR));
+				.body(ApiResponse.failure(ex.getLocalizedMessage(), ErrorCodes.INTERNAL_ERROR));
 	}
 
 }

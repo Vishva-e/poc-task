@@ -19,11 +19,9 @@ import com.company.saas_core.model.response.UserResponse;
 import com.company.saas_core.service.UserService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/users")
-@RequiredArgsConstructor
 public class UserController {
 
 	@Autowired

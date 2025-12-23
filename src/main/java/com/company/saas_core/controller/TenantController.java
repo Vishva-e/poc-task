@@ -18,11 +18,9 @@ import com.company.saas_core.model.request.CreateTenantRequest;
 import com.company.saas_core.service.TenantService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/admin/tenants")
-@RequiredArgsConstructor
 public class TenantController {
 
 	@Autowired

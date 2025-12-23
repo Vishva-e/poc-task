@@ -20,11 +20,9 @@ import com.company.saas_core.model.response.ProductResponse;
 import com.company.saas_core.service.ProductService;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/products")
-@RequiredArgsConstructor
 public class ProductController {
 
 	@Autowired
@@ -33,37 +31,32 @@ public class ProductController {
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
 	public ResponseEntity<ApiResponse<ProductResponse>> get(@PathVariable Long id) {
-	    return ResponseEntity.ok(
-	            ApiResponse.success("Product retrieved successfully", productService.get(id))
-	    );
+		return ResponseEntity.ok(ApiResponse.success("Product retrieved successfully", productService.get(id)));
 	}
 
 	@GetMapping
+<<<<<<< HEAD
 	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_USER','ROLE_EMPLOYEE')")
+=======
+	@PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+>>>>>>> 324e072 (changes commit)
 	public ResponseEntity<ApiResponse<List<ProductResponse>>> list() {
-	    return ResponseEntity.ok(
-	            ApiResponse.success(
-	                    "Products retrieved successfully",
-	                    productService.list()
-	            )
-	    );
+		return ResponseEntity.ok(ApiResponse.success("Products retrieved successfully", productService.list()));
 	}
 
 	@PostMapping
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-	public ResponseEntity<ApiResponse<ProductResponse>> create(
-	        @Valid @RequestBody CreateProductRequest request) {
+	public ResponseEntity<ApiResponse<ProductResponse>> create(@Valid @RequestBody CreateProductRequest request) {
 
-	    return ResponseEntity.status(HttpStatus.CREATED)
-	            .body(ApiResponse.success("Product created successfully",
-	                    productService.create(request)));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.success("Product created successfully", productService.create(request)));
 	}
 
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
-	    productService.delete(id);
-	    return ResponseEntity.ok(ApiResponse.success("Product deleted successfully"));
+		productService.delete(id);
+		return ResponseEntity.ok(ApiResponse.success("Product deleted successfully"));
 	}
 
 }

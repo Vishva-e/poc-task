@@ -24,8 +24,6 @@ public final class ApiResponse<T> {
 		this.traceId = UUID.randomUUID().toString();
 	}
 
-	/* ---------- Factory Methods ---------- */
-
 	public static <T> ApiResponse<T> success(String message, T data) {
 		return new ApiResponse<>(true, message, null, data);
 	}

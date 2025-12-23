@@ -17,28 +17,19 @@ import com.company.saas_core.model.response.UserResponse;
 import com.company.saas_core.repository.EmployeeRepository;
 import com.company.saas_core.repository.UserRepository;
 import com.company.saas_core.tenant.TenantContext;
-import com.company.saas_core.tenant.TenantFilterEnabler;
 import com.company.saas_core.valid.model.CreateEmployeeRequest;
 
 @Service
 public class EmployeeService {
 
 	@Autowired
-	private  EmployeeRepository employeeRepository;
+	private EmployeeRepository employeeRepository;
 	@Autowired
-	private  UserRepository userRepository;
+	private UserRepository userRepository;
 	@Autowired
-	private  PasswordEncoder passwordEncoder;
-	@Autowired
-	private  TenantFilterEnabler filterEnabler;
-
-	public EmployeeService(EmployeeRepository employeeRepository, TenantFilterEnabler filterEnabler,
-			UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		this.employeeRepository = employeeRepository;
-		this.filterEnabler = filterEnabler;
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
+	private PasswordEncoder passwordEncoder;
+//	@Autowired
+//	private TenantFilterEnabler filterEnabler;
 
 	@Transactional
 	public Employee create(CreateEmployeeRequest req) {
@@ -77,15 +68,13 @@ public class EmployeeService {
 
 			return employeeRepository.save(employee);
 		} catch (Exception e) {
-			userRepository.delete(user);
-			employeeRepository.delete(employee);
 			throw new ConflictException(e.getMessage());
 		}
 	}
 
 	@Transactional(readOnly = true)
 	public List<EmployeeResponse> list() throws Exception {
-		filterEnabler.enableFilter();
+//		filterEnabler.enableFilter();
 		List<Employee> employees = new ArrayList<>();
 		try {
 			employees = employeeRepository.findAll();
@@ -97,13 +86,13 @@ public class EmployeeService {
 
 	@Transactional(readOnly = true)
 	public Employee get(Long id) {
-		filterEnabler.enableFilter();
+//		filterEnabler.enableFilter();
 		return employeeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Not found"));
 	}
 
 	@Transactional
 	public Employee update(Long id, Employee updated) {
-		filterEnabler.enableFilter();
+//		filterEnabler.enableFilter();
 		Employee existing = employeeRepository.findById(id)
 				.orElseThrow(() -> new IllegalArgumentException("Not found"));
 		existing.setFirstName(updated.getFirstName());
@@ -115,7 +104,7 @@ public class EmployeeService {
 
 	@Transactional
 	public void delete(Long id) {
-		filterEnabler.enableFilter();
+//		filterEnabler.enableFilter();
 		employeeRepository.deleteById(id);
 	}
 

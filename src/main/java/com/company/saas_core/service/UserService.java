@@ -16,7 +16,6 @@ import com.company.saas_core.model.response.UserResponse;
 import com.company.saas_core.repository.UserRepository;
 import com.company.saas_core.security.JwtService;
 import com.company.saas_core.tenant.TenantContext;
-import com.company.saas_core.tenant.TenantFilterEnabler;
 
 @Service
 public class UserService {
@@ -26,8 +25,8 @@ public class UserService {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private JwtService jwtService;
-	@Autowired
-	private TenantFilterEnabler filterEnabler;
+//	@Autowired
+//	private TenantFilterEnabler filterEnabler;
 
 	@Value("${app.security.jwt.expiration}")
 	private long jwtExpirationMs;
@@ -42,7 +41,7 @@ public class UserService {
 			}
 			Long tenantId = user.getTenantId();
 			TenantContext.setTenantId(tenantId);
-			filterEnabler.enableFilter();
+//			filterEnabler.enableFilter();
 			String[] roles = user.getRoles() == null ? new String[0] : user.getRoles().split(",");
 			
 			LoginResponse response = new LoginResponse();

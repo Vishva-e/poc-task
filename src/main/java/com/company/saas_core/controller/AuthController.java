@@ -13,6 +13,8 @@ import com.company.saas_core.model.request.LoginRequest;
 import com.company.saas_core.model.response.LoginResponse;
 import com.company.saas_core.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/auth")
 @Validated
@@ -22,7 +24,7 @@ public class AuthController {
 	private UserService userService;
 
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse<LoginResponse>> login(@RequestBody LoginRequest r) throws Exception {
+	public ResponseEntity<ApiResponse<LoginResponse>> login(@Valid @RequestBody LoginRequest r) throws Exception {
 
 		return ResponseEntity
 				.ok(ApiResponse.success("Login successful", userService.authenticate(r.username, r.password)));
