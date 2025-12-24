@@ -43,7 +43,7 @@ public class UserService {
 			TenantContext.setTenantId(tenantId);
 //			filterEnabler.enableFilter();
 			String[] roles = user.getRoles() == null ? new String[0] : user.getRoles().split(",");
-			
+
 			LoginResponse response = new LoginResponse();
 			response.setAccessToken(jwtService.generateToken(user.getUsername(), tenantId, Arrays.asList(roles)));
 			response.setTokenType("Bearer");
@@ -58,6 +58,7 @@ public class UserService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public UserResponse create(UserRequest request) {
 		Long tenantId = requireTenant();
 		if (userRepository.existsByUsernameAndTenantId(request.getUsername(), tenantId))
@@ -82,6 +83,7 @@ public class UserService {
 		return userRepository.findAllByTenantId(tenantId).stream().map(this::map).toList();
 	}
 
+	@Transactional(readOnly = true)
 	public UserResponse update(Long id, UserRequest request) {
 		Long tenantId = requireTenant();
 
@@ -99,6 +101,7 @@ public class UserService {
 		return map(user);
 	}
 
+	@Transactional(readOnly = true)
 	public void delete(Long id) {
 		Long tenantId = requireTenant();
 		userRepository.delete(userRepository.findByIdAndTenantId(id, tenantId)
